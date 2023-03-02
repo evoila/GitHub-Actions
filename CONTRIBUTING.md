@@ -28,3 +28,18 @@ The source code for [custom actions in the Marketplace](https://github.com/marke
 > - […]
 
 However, the quality of third-party actions varies.
+
+## Security
+
+Any action that we call and is not maintained by either:
+
+- ourselves (whether in [this repository](../actions) or some other),
+- [GitHub itself](https://github.com/actions) or
+- individuals and organizations we trust
+
+must be pinned to git commits (i.e. hashes) instead of tags or branches (e.g. `v3`),
+because tags and branches can be modified and such changes could not only break our workflows, but also introduce malicious code.
+This approach is [endorsed by GitHub itself](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions):
+
+> Pinning an action to a full length commit SHA is currently the only way to use an action as an immutable release.
+> Pinning to a particular SHA helps mitigate the risk of a bad actor adding a backdoor to the action's repository, as they would need to generate a SHA-1 collision for a valid Git object payload.
