@@ -47,3 +47,19 @@ For example, the process of checking Markdown documents on pull requests may be
 
 1. proposed and discussed with an issue and then
 2. implemented and reviewed as part of a pull request.
+
+## Versioning
+
+This repository abides by [semantic versioning](https://semver.org/);
+every change that is relevant to users must be assigned a new version such that:
+
+- bug fixes increase the _patch_ version number;
+- backwards compatible features, like a new custom action, increase the _minor_ version number; and
+- backwards incompatible changes, like the removal of a reusable workflow, increase the _major_ version number.
+
+For every version there _must_ be a [git tag](https://www.git-scm.com/book/en/v2/Git-Basics-Tagging);
+for example, version 1.2.3 requires the git tag `v1.2.3`.
+
+Additionally, there _may_ be [git branches](https://www.git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell) for major and minor versions.
+Such branches would enable [backports](https://en.wikipedia.org/wiki/Backporting);
+users that refer to them would automatically receive backwards compatible changes like bug fixes.
