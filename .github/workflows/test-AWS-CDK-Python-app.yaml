@@ -12,6 +12,8 @@ defaults:
 
 
 env:
+  # Without quotes, this key could be parsed as the boolean false value instead of the string "false"
+  npm_config_fund: 'false'
   npm_config_loglevel: verbose
 
 
