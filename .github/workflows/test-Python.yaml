@@ -1,0 +1,11 @@
+---
+
+# This reusable workflow assumes that dependencies are managed with Poetry,
+# because the business unit AWS has settled on it instead of Pipenv and other dependency managers.
+
+name: Python testing
+
+
+# Without quotes, this key could be parsed as the boolean true value instead of the string "on"
+'on':
+  workflow_call:
