@@ -1,0 +1,35 @@
+---
+
+name: Set up Node.js and install dependencies with npm
+
+description: |
+  Set up the version of Node.js specified in the file `.nvmrc`
+  and install dependencies specified in either `package-lock.json` or `npm-shrinkwrap.json` with npm
+
+runs:
+  using: composite
+  steps:
+    -
+      name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        cache: npm
+        # Besides .nvmrc, actions/setup-node@v3 can read the Node.js version to install from other sources:
+        #  - the key `engines.node` in package.json;
+        #  - the key `volta.node` in package.json;
+        #  - the file .node-version; and
+        #  - the file .tool-versions.
+        # The key `engines` in package.json[1] is meant for distributable packages;
+        # this was the conceptual reason of the Volta team for resorting to their own key[2].
+        # .node-version is supported by multiple tools, but not by NVM[3], which seems the most popular, and it doesn't support semver specifications.
+        # .tool-versions is supported by asdf, which seems interesting but David was too lazy to dive into.
+        # 1: https://docs.npmjs.com/cli/v9/configuring-npm/package-json#engines
+        # 2: https://github.com/volta-cli/volta/issues/742#issuecomment-631588143
+        # 3: https://github.com/nvm-sh/nvm/issues/794
+        node-version-file: .nvmrc
+    -
+      name: Install Node.js dependencies
+      shell: sh
+      run: >-
+        npm
+        ci
