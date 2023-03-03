@@ -103,3 +103,10 @@ jobs:
           --strict
           --verbose
           synthesize
+      -
+        name: Upload synthesized CloudFormation templates
+        uses: actions/upload-artifact@v3
+        with:
+          name: CloudFormation templates
+          path: |
+            cdk.out/
