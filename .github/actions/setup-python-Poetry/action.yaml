@@ -1,0 +1,77 @@
+---
+
+name: Set up Python and install dependencies with Poetry
+
+description: |
+  First set up Python with the [action `setup-python` from GitHub](https://github.com/marketplace/actions/setup-python).
+  Then install version 1.4.0 of [Poetry](https://python-poetry.org/) in a reproducible way.
+  Finally install the dependencies listed in `poetry.lock`.
+
+inputs:
+  python-version-file:
+    description: |
+      Plain text file in which the Python version to set up is specified.
+
+      This action sets up Python using version 4 of the [action `setup-python` from GitHub](https://github.com/marketplace/actions/setup-python),
+      which supports only plain text files,
+      unlike the [action `setup-node` from GitHub](https://github.com/marketplace/actions/setup-node-js-environment).
+
+      This limitation results in duplication when using Poetry,
+      because Poetry requires that the same information be specified in the key `tool.poetry.dependencies.python` in `pyproject.toml`.
+      Support for Poetry has been [requested](https://github.com/actions/setup-python/issues/542) but not implemented yet.
+    # By making this input mandatory, the best practice of pinning the Python version is enforced.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    -
+      # Poetry does not offer an equivalent to the [npm subcommand `ci`](https://docs.npmjs.com/cli/v9/commands/npm-ci),
+      # and it is not possible to make the [Poetry subcommand `install`](https://python-poetry.org/docs/cli/#install) fail if there's no lock file.
+      name: Ensure that the Poetry lock file has been committed to the repository
+      # The command `test` is not specific to Bash or any other shell, but [part of the POSIX shell standard](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/test.html)
+      shell: sh
+      run: >-
+        test
+        -f
+        poetry.lock
+    -
+      name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        # FIXME: Enable cache
+        # If uncommented, the action fails with the following error message:
+        #
+        # > Unable to locate executable file: poetry.
+        #
+        # This error message suggests that the action needs Poetry to restore its cache.
+        # How can Poetry be installed before this action, which sets up Python?
+        #
+        # cache: poetry
+        python-version-file: ${{ inputs.python-version-file }}
+    -
+      name: Install Poetry
+      shell: sh
+      # If only Poetry itself were pinned (e.g. with `pip install -- poetry==1.4.0`),
+      # the [subcommand `pip install`](https://pip.pypa.io/en/stable/cli/pip_install/) would install the latest compatible version of each of its dependencies and therefore yield a different result with time.
+      # A [requirements file](https://pip.pypa.io/en/stable/reference/requirements-file-format/) listing all dependencies increases reproducibility and the reliability of workflows calling this custom action.
+      run: >-
+        pip
+        --verbose
+        install
+        --progress-bar=off
+        --requirement="${GITHUB_ACTION_PATH}/requirements.txt"
+    -
+      name: Install Python dependencies
+      shell: sh
+      # With Poetry, linters like Flake8 and other testing tools are usually part of a [dependency group](https://python-poetry.org/docs/master/managing-dependencies/#dependency-groups), often called `dev`.
+      # By default, the [Poetry subcommand `install`](https://python-poetry.org/docs/cli/#install) installs dependency groups that are not [optional](https://python-poetry.org/docs/master/managing-dependencies/#optional-groups):
+      #
+      # > By default, dependencies across all non-optional groups will be installed when executing `poetry install`.
+      #
+      # This behaviour is documented as part of the [section on dependency management](https://python-poetry.org/docs/master/managing-dependencies/).
+      run: >-
+        poetry
+        --verbose
+        install
+        --no-interaction
