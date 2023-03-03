@@ -1,0 +1,53 @@
+---
+
+name: Set up Python and install dependencies with Poetry
+
+description: |
+  Set up the version of Python specified in the file `.python-version`,
+  install Poetry
+  and then install dependencies
+
+runs:
+  using: composite
+  steps:
+    -
+      # Poetry does not offer an equivalent to npm's `ci` subcommand;
+      # it is not possible to make the command `poetry install` fail if there's no lock file.
+      name: Ensure that the Poetry lock file has been committed to the repository
+      shell: bash
+      # [Bash builtin `test`](https://www.gnu.org/software/bash/manual/bash#index-test)
+      run: >-
+        test
+        -f
+        poetry.lock
+    -
+      name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        # FIXME: Enable cache
+        # cache: poetry
+        # FIXME: Get Python version from pyproject.toml instead of .python-version when actions/setup-python [supports it](https://github.com/actions/setup-python/issues/542)
+        python-version-file: .python-version
+    -
+      name: Install Poetry
+      shell: sh
+      run: >-
+        pip
+        --verbose
+        install
+        --progress-bar=off
+        --
+        poetry
+    -
+      name: Install Python dependencies
+      shell: sh
+      # With Poetry, linters like Flake8 and other testing tools are usually part of a [dependency group](https://python-poetry.org/docs/master/managing-dependencies/#dependency-groups), often called `dev`. By default, the command `poetry install` installs dependency groups that are not [optional](https://python-poetry.org/docs/master/managing-dependencies/#optional-groups):
+      #
+      # > By default, dependencies across all non-optional groups will be installed when executing `poetry install`.
+      #
+      # https://python-poetry.org/docs/master/managing-dependencies/
+      run: >-
+        poetry
+        --verbose
+        install
+        --no-interaction
