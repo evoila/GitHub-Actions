@@ -1,0 +1,78 @@
+---
+
+name: AWS CDK Python app deployment
+
+
+defaults:
+  run:
+    # The shell steps in this workflow don't need Bash,
+    # which is the default on Linux runners;
+    # POSIX shell functionality suffices.
+    shell: sh
+
+
+env:
+  # Without quotes, this key could be parsed as the boolean false value instead of the string "false"
+  npm_config_fund: 'false'
+  npm_config_loglevel: verbose
+
+
+# Without quotes, this key could be parsed as the boolean true value instead of the string "on"
+'on':
+  workflow_call:
+
+
+jobs:
+
+  deploy:
+    name: Deploy AWS CDK app
+    permissions:
+      contents: read
+      # required by aws-actions/configure-aws-credentials@v1
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Check out corresponding git branch
+        uses: actions/checkout@v3
+        with:
+          # This job does not require git history
+          fetch-depth: 1
+      -
+        name: Set up npm
+        uses: ./.github/actions/setup-npm
+      -
+        name: Set up Poetry
+        uses: ./.github/actions/setup-Poetry
+      -
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          ## half an hour
+          #role-duration-seconds: 1800
+          role-external-id: FIXME
+          #role-session-name: FIXME
+          role-skip-session-tagging: false
+          role-to-assume: ${{role.ARN}}
+          role-to-assume: arn:${{ partition }}:iam::${{ CDK_DEFAULT_ACCOUNT }}:role${{ role.path }}${{ role.name }}
+          role-to-assume: arn:aws:iam::659664769788:role/my-github-actions-role-test
+      -
+        name: Deploy AWS CDK app
+        # The `cdk` command must run under both `poetry run` and `npx` because:
+        #  - the dependencies of the CDK code are installed in a virtualenv managed by Poetry; and
+        #  - the command `cdk` itself is installed locally by npm.
+        run: >-
+          poetry
+          --verbose
+          run
+          --
+          npx
+          --
+          cdk
+          --ci
+          --lookups=false
+          --notices
+          --output=cdk.out
+          --strict
+          --verbose
+          deploy
