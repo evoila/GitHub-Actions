@@ -17,12 +17,25 @@ defaults:
 # Without quotes, this key could be parsed as the boolean true value instead of the string "on"
 'on':
   workflow_call:
+    inputs:
+      run_Flake8:
+        default: true
+        description: Whether to lint Python code with Flake8
+        type: boolean
+      run_pytest:
+        default: true
+        description: Whether to test Python code with pytest
+        type: boolean
 
 
 jobs:
 
   Flake8:
     name: Lint Python code with Flake8
+    if: |
+      ${{
+        inputs.run_Flake8
+      }}
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -72,6 +85,10 @@ jobs:
 
   pytest:
     name: Test Python code with pytest
+    if: |
+      ${{
+        inputs.run_pytest
+      }}
     permissions:
       contents: read
     strategy:
