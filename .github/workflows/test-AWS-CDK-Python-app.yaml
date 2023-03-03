@@ -6,3 +6,45 @@ name: AWS CDK Python app testing
 # Without quotes, this key could be parsed as the boolean true value instead of the string "on"
 'on':
   workflow_call:
+
+
+jobs:
+
+  doctor:
+    name: Check CDK app for potential problems
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Check out corresponding git branch
+        uses: actions/checkout@v3
+        with:
+          # This job does not require git history
+          fetch-depth: 1
+      -
+        name: Set up npm
+        uses: ./.github/actions/setup-npm
+      -
+        name: Set up Poetry
+        uses: ./.github/actions/setup-Poetry
+      -
+        name: Check CDK app for potential problems
+        # The `cdk` command must run under both `poetry run` and `npx` because:
+        #  - the dependencies of the CDK code are installed in a virtualenv managed by Poetry; and
+        #  - the command `cdk` itself is installed locally by npm.
+        run: >-
+          poetry
+          --verbose
+          run
+          --
+          npx
+          --
+          cdk
+          --ci
+          --lookups=false
+          --notices
+          --output=cdk.out
+          --strict
+          --verbose
+          doctor
