@@ -61,3 +61,34 @@ jobs:
           poetry
           --verbose
           check
+
+  pytest:
+    name: Test Python code with pytest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        OS:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.OS }}
+    steps:
+      -
+        name: Check out corresponding git branch
+        uses: actions/checkout@v3
+        with:
+          # This job does not require git history
+          fetch-depth: 1
+      -
+        name: Set up Poetry
+        uses: ./.github/actions/setup-Poetry
+      -
+        name: Test Python code with pytest
+        run: >-
+          poetry
+          --verbose
+          run
+          --
+          pytest
+          --verbose
