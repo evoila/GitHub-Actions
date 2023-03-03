@@ -9,3 +9,28 @@ name: Python testing
 # Without quotes, this key could be parsed as the boolean true value instead of the string "on"
 'on':
   workflow_call:
+
+
+jobs:
+
+  Poetry-check:
+    name: Validate the structure of pyproject.toml
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Check out corresponding git branch
+        uses: actions/checkout@v3
+        with:
+          # This job does not require git history
+          fetch-depth: 1
+      -
+        name: Set up Poetry
+        uses: ./.github/actions/setup-Poetry
+      -
+        name: Validate the structure of the pyproject.toml
+        run: >-
+          poetry
+          --verbose
+          check
