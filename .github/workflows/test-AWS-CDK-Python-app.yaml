@@ -65,10 +65,10 @@ jobs:
           fetch-depth: 1
       -
         name: Set up npm
-        uses: ./.github/actions/setup-npm
+        uses: evoila/GitHub-Actions/.github/actions/setup-npm@stage
       -
         name: Set up Poetry
-        uses: ./.github/actions/setup-Poetry
+        uses: evoila/GitHub-Actions/.github/actions/setup-Poetry@stage
       -
         name: Synthesize CloudFormation templates from CDK app
         # The `cdk` command must run under both `poetry run` and `npx` because:
