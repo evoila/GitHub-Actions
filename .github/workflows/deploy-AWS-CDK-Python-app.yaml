@@ -40,10 +40,10 @@ jobs:
           fetch-depth: 1
       -
         name: Set up npm
-        uses: ./.github/actions/setup-npm
+        uses: evoila/GitHub-Actions/.github/actions/setup-npm@stage
       -
         name: Set up Poetry
-        uses: ./.github/actions/setup-Poetry
+        uses: evoila/GitHub-Actions/.github/actions/setup-Poetry@stage
       -
         name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
