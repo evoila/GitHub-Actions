@@ -82,7 +82,7 @@ jobs:
           fetch-depth: 1
       -
         name: Set up Poetry
-        uses: ./.github/actions/setup-Poetry
+        uses: evoila/GitHub-Actions/.github/actions/setup-Poetry@stage
       -
         name: Test Python code with pytest
         run: >-
