@@ -1,0 +1,19 @@
+---
+
+name: Check Markdown documents
+
+
+defaults:
+  run:
+    # The shell steps in this workflow don't need Bash,
+    # which is the default on Linux runners;
+    # POSIX shell functionality suffices.
+    shell: sh
+
+
+# Without quotes, this key could be parsed as the boolean true value instead of the string "on"
+'on':
+  workflow_call:
+
+
+jobs:
