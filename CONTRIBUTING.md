@@ -71,6 +71,21 @@ After you clone this repository, install:
   found 0 vulnerabilities
   ```
 
+- Python tools in a [virtualenv](https://docs.python.org/3/glossary.html#term-virtual-environment) with the [Poetry subcommand `install`](https://python-poetry.org/docs/cli/#install):
+
+  ```Shell
+  $ poetry install
+  Creating virtualenv dummy-1-4uI-Ox-py3.10 in /home/djsp/.cache/pypoetry/virtualenvs
+  Installing dependencies from lock file
+
+  Package operations: 3 installs, 1 update, 0 removals
+
+    • Installing pathspec (0.11.0)
+    • Installing pyyaml (6.0)
+    • Updating setuptools (65.6.3 -> 67.6.0)
+    • Installing yamllint (1.29.0)
+  ```
+
 ### Markdown
 
 Check [Markdown](https://daringfireball.net/projects/markdown/) documents you add or modify with [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2), a JavaScript tool.
@@ -85,3 +100,12 @@ Summary: 0 error(s)
 ```
 
 You can set up exceptions for this entire repository in the [configuration file `.markdownlint-cli2.yaml`](.markdownlint-cli2.yaml).
+
+### YAML
+
+Check [YAML streams](https://yaml.org/spec/1.2.2/#streams) you add or modify with [yamllint](https://github.com/adrienverge/yamllint), a Python tool.
+After you install Python tools, you can invoke it through the [Poetry subcommand `run`](https://python-poetry.org/docs/cli/#run):
+
+```Shell
+poetry run -- yamllint -- .
+```
