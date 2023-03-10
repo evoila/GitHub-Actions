@@ -1,0 +1,11 @@
+---
+
+name: Check YAML streams
+
+
+# Without quotes, this key could be parsed as the boolean true value instead of the string "on"
+'on':
+  workflow_call:
+
+
+jobs:
