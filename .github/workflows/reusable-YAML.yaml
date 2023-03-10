@@ -1,11 +1,45 @@
 ---
 
+# This reusable workflow assumes that Python dependencies are managed with Poetry.
+
 name: Check YAML streams
 
 
 # Without quotes, this key could be parsed as the boolean true value instead of the string "on"
 'on':
   workflow_call:
+    inputs:
+      python-version-file:
+        description: File in which the Python version to set up is specified.
+        type: string
 
 
 jobs:
+
+  yamllint:
+    name: Lint YAML streams with yamllint
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Check out pertinent branch
+        uses: actions/checkout@v3
+        with:
+          # This job does not require git history
+          fetch-depth: 1
+      -
+        name: Set up Python and install dependencies with Poetry
+        # FIXME: Set proper reference (instead of the working branch `custom_actions`)
+        uses: evoila/GitHub-Actions/.github/actions/setup-python-Poetry@custom_actions
+      -
+        name: Lint YAML streams with yamllint
+        run: >-
+          poetry
+          --verbose
+          run
+          --
+          yamllint
+          --strict
+          --
+          .
