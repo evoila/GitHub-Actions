@@ -1,0 +1,11 @@
+---
+
+# Settings are documented in the [README for `markdownlint-cli2`](https://github.com/DavidAnson/markdownlint-cli2#configuration)
+
+
+globs:
+  - '**/*.md'
+
+ignores:
+  - .git/
+  - node_modules/

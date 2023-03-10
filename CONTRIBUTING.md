@@ -43,3 +43,45 @@ This approach is [endorsed by GitHub itself](https://docs.github.com/en/actions/
 
 > Pinning an action to a full length commit SHA is currently the only way to use an action as an immutable release.
 > Pinning to a particular SHA helps mitigate the risk of a bad actor adding a backdoor to the action's repository, as they would need to generate a SHA-1 collision for a valid Git object payload.
+
+## Testing
+
+We agree to test changes to this codebase with some tools.
+
+If we used different versions of these tools, we could get different results.
+Therefore, everyone should use the same version of each tool and its respective dependencies.
+The best way to accomplish that is to install them with package managers that support [lockfiles](https://blog.shalvah.me/posts/understanding-lockfiles), like:
+
+- [npm](https://docs.npmjs.com/cli/v9/commands/npm) for JavaScript and TypeScript tools;
+- [Poetry](https://python-poetry.org/) for Python tools; and
+- [Bundler](https://bundler.io/) for Ruby tools.
+
+After you clone this repository, install:
+
+- JavaScript and TypeScript tools [locally](https://docs.npmjs.com/downloading-and-installing-packages-locally) with the [npm subcommand `ci`](https://docs.npmjs.com/cli/v9/commands/npm-ci):
+
+  ```Shell
+  $ npm ci
+
+  added 34 packages, and audited 35 packages in 527ms
+
+  7 packages are looking for funding
+    run `npm fund` for details
+
+  found 0 vulnerabilities
+  ```
+
+### Markdown
+
+Check [Markdown](https://daringfireball.net/projects/markdown/) documents you add or modify with [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2), a JavaScript tool.
+After you install JavaScript tools, you can invoke it through the [command `npx`](https://docs.npmjs.com/cli/v9/commands/npx):
+
+```Shell
+$ npx -- markdownlint-cli2
+markdownlint-cli2 v0.6.0 (markdownlint v0.27.0)
+Finding: **/*.md !.git/ !node_modules/
+Linting: 4 file(s)
+Summary: 0 error(s)
+```
+
+You can set up exceptions for this entire repository in the [configuration file `.markdownlint-cli2.yaml`](.markdownlint-cli2.yaml).
