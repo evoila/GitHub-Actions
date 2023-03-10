@@ -1,5 +1,9 @@
 ---
 
+config:
+  # Allow lines of any length
+  MD013: false
+
 globs:
   - '**/*.md'
 
