@@ -16,3 +16,9 @@ name: Change proposal testing
 
 
 jobs:
+
+  test-Markdown:
+    name: Check Markdown documents
+    uses: ./.github/workflows/reusable-Markdown.yaml
+    with:
+      node-version-file: .nvmrc
