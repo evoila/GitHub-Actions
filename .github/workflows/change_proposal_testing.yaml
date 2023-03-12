@@ -22,3 +22,9 @@ jobs:
     uses: ./.github/workflows/reusable-Markdown.yaml
     with:
       node-version-file: .nvmrc
+
+  test-YAML:
+    name: Check YAML streams
+    uses: ./.github/workflows/reusable-YAML.yaml
+    with:
+      python-version-file: .python-version
