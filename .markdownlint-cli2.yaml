@@ -1,0 +1,15 @@
+---
+
+# Settings are documented in the [README for `markdownlint-cli2`](https://github.com/DavidAnson/markdownlint-cli2#configuration)
+
+
+config:
+  # Allow lines of any length
+  MD013: false
+
+globs:
+  - '**/*.md'
+
+ignores:
+  - .git/
+  - node_modules/

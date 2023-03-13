@@ -1,0 +1,6 @@
+{
+	"name": "dummy",
+	"devDependencies": {
+		"markdownlint-cli2": "^0.6.0"
+	}
+}
