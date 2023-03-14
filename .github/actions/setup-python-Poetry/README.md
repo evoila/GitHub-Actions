@@ -8,7 +8,6 @@ and extends it by installing [Poetry](https://python-poetry.org/) and then the d
 This action:
 
 - enforces [pinning of the Python version](https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#using-the-python-version-file-input), a best practice;
-- installs Poetry in a reproducible way, pinning not only Poetry itself but also its dependencies; and
+- installs Poetry in a reproducible way, pinning not only Poetry itself but also its dependencies;
+- [caches dependencies](https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#caching-packages); and
 - ensures that Poetry's lockfile (`poetry.lock`) has been committed, which the [Poetry subcommand `install`](https://python-poetry.org/docs/cli/#install) does not.
-
-It will hopefully also cache the Poetry environment, which is not trivial, at some point.

@@ -36,20 +36,7 @@ runs:
         -f
         poetry.lock
     -
-      name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        # FIXME: Enable cache
-        # If uncommented, the action fails with the following error message:
-        #
-        # > Unable to locate executable file: poetry.
-        #
-        # This error message suggests that the action needs Poetry to restore its cache.
-        # How can Poetry be installed before this action, which sets up Python?
-        #
-        # cache: poetry
-        python-version-file: ${{ inputs.python-version-file }}
-    -
+      # Poetry may be installed before calling the action `actions/setup-python` because the [images for GitHub Actions runners](https://github.com/actions/runner-images#available-images) contain (different versions of) Python and pip.
       name: Install Poetry
       shell: sh
       # If only Poetry itself were pinned (e.g. with `pip install -- poetry==1.4.0`),
@@ -61,6 +48,12 @@ runs:
         install
         --progress-bar=off
         --requirement="${GITHUB_ACTION_PATH}/requirements.txt"
+    -
+      name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        cache: poetry
+        python-version-file: ${{ inputs.python-version-file }}
     -
       name: Install Python dependencies
       shell: sh
