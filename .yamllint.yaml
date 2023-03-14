@@ -1,0 +1,14 @@
+---
+
+# Settings are documented in a [page of the _Read the Docs_ site](https://yamllint.readthedocs.io/en/stable/configuration.html)
+
+
+extends: default
+
+ignore: |
+  .git/
+  node_modules/
+
+rules:
+  # Allow lines of any length
+  line-length: disable

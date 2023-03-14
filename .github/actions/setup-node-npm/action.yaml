@@ -1,0 +1,49 @@
+---
+
+name: Set up Node.js and install dependencies with npm
+
+description: |
+  Set up Node.js with the [action `setup-node` from GitHub](https://github.com/marketplace/actions/setup-node-js-environment)
+  and then install the dependencies listed in either `package-lock.json` or `npm-shrinkwrap.json` with npm,
+  enforcing best practices.
+
+inputs:
+  node-version-file:
+    description: |
+      File in which the Node.js version to set up is specified.
+
+      This action sets up Node.js using version 3 of the [action `setup-node` from GitHub](https://github.com/marketplace/actions/setup-node-js-environment),
+      which can read the Node.js version to install from [several sources](https://github.com/actions/setup-node/blob/main/docs/advanced-usage.md#node-version-file):
+
+      - the [file `.nvmrc`](https://github.com/nvm-sh/nvm#nvmrc),
+      - the [key `engines.node` in `package.json`](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#engines);
+      - the [key `volta.node` in `package.json`](https://docs.volta.sh/guide/understanding#pinning-node-engines);
+      - the file `.node-version`; and
+      - the file `.tool-versions`.
+
+      The key `engines.node` in `package.json` should not be used when npm is used only to manage dependencies and not to build a package.
+      This is why the Volta team [resorted to their own key](https://github.com/volta-cli/volta/issues/742#issuecomment-631588143).
+
+      The file `.node-version` is supported by [multiple tools][1][2] but [not by NVM](https://github.com/nvm-sh/nvm/issues/794).
+      It isn't standardized, and it doesn't support version ranges.
+
+      [1]: https://stackoverflow.com/q/27425852/2207421
+      [2]: https://github.com/shadowspawn/node-version-usage
+    # By making this input mandatory, the best practice of pinning the Node.js version is enforced.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    -
+      name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        cache: npm
+        node-version-file: ${{ inputs.node-version-file }}
+    -
+      name: Install Node.js dependencies
+      shell: sh
+      run: >-
+        npm
+        ci

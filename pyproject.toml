@@ -1,0 +1,17 @@
+[tool.poetry]
+name = 'dummy'
+version = '0.0.1'
+description = ''
+authors = [
+]
+
+[tool.poetry.dependencies]
+# Keep `.python-version` in sync!
+python = '^3.10.9'
+yamllint = '^1.29.0'
+
+[build-system]
+requires = [
+	'poetry-core',
+]
+build-backend = 'poetry.core.masonry-api'
