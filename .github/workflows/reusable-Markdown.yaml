@@ -1,0 +1,58 @@
+---
+
+# This reusable workflow assumes that Node.js dependencies are managed with npm.
+
+name: Check Markdown documents
+
+
+defaults:
+  run:
+    # Default to POSIX shell.
+    # Steps can still override this and use Bash if needed.
+    # The shell steps in this workflow don't need Bash,
+    # which is the default on Linux runners;
+    # POSIX shell functionality suffices.
+    shell: sh
+
+
+env:
+  # Without quotes, this key could be parsed as the boolean false value instead of the string "false"
+  npm_config_fund: 'false'
+  npm_config_loglevel: verbose
+
+
+# Without quotes, this key could be parsed as the boolean true value instead of the string "on"
+'on':
+  workflow_call:
+    inputs:
+      node-version-file:
+        description: File in which the Node.js version to set up is specified.
+        type: string
+
+
+jobs:
+
+  markdownlint-cli2:
+    name: Lint Markdown documents with markdownlint-cli2
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Check out corresponding git branch
+        uses: actions/checkout@v3
+        with:
+          # This job does not require git history
+          fetch-depth: 1
+      -
+        name: Set up Node.js and install dependencies
+        uses: evoila/GitHub-Actions/.github/actions/setup-node-npm@v0.1.0
+        with:
+          node-version-file: ${{ inputs.node-version-file }}
+      -
+        name: Lint Markdown documents with markdownlint-cli2
+        # Configuration is in .markdownlint-cli2.yaml files
+        run: >-
+          npx
+          --
+          markdownlint-cli2
