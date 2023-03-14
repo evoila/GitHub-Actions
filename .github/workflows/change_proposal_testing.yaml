@@ -1,0 +1,30 @@
+---
+
+name: Change proposal testing
+
+
+# Without quotes, this key could be parsed as the boolean true value instead of the string "on"
+'on':
+  pull_request:
+    types:
+      # A pull request was created
+      - opened
+      # A previously closed pull request was reopened
+      - reopened
+      # A pull request's head branch was updated
+      - synchronize
+
+
+jobs:
+
+  test-Markdown:
+    name: Check Markdown documents
+    uses: ./.github/workflows/reusable-Markdown.yaml
+    with:
+      node-version-file: .nvmrc
+
+  test-YAML:
+    name: Check YAML streams
+    uses: ./.github/workflows/reusable-YAML.yaml
+    with:
+      python-version-file: .python-version
